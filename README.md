@@ -1,6 +1,6 @@
 # Lateral Prompts
 
-A deck of lateral-thinking prompts for Claude Code, in the spirit of Brian Eno and Peter Schmidt's Oblique Strategies. When you're stuck, run `/lateral-prompts` and Claude draws four cards, spawns four isolated subagents to explore your work through each card, then synthesizes what came back.
+A deck of lateral-thinking prompts for Claude Code. When you're stuck, run `/lateral-prompts` and Claude draws four cards, spawns four isolated subagents to explore your work through each card, then synthesizes what came back.
 
 The cards exist to break stuck thinking, not to think faster along the same line. They work because the draw is uncorrelated with your problem, so the cards pull you into territory you wouldn't reach by pushing harder on the same idea.
 
@@ -109,7 +109,7 @@ skills/lateral-prompts/evals/           evals for the skill
 
 ## Credits
 
-The workflow and deck are by Very Good Ventures. The lineage runs back to Brian Eno and Peter Schmidt's *Oblique Strategies* (1975), which proved that a deck of cards can outperform staring at the wall.
+The workflow and deck are by Very Good Ventures. Inspired by Brian Eno and Peter Schmidt's *Oblique Strategies* (1975), frog design's frogthink random-entry technique, and other lateral-thinking practices that use chance to break stuck patterns.
 
 ## License
 

@@ -100,7 +100,7 @@
       "id": "T11",
       "split": "train",
       "should_trigger": false,
-      "query": "Pretend you're Brian Eno's Oblique Strategies and pull me a card for this draft."
+      "query": "Pretend you're a deck of creative prompt cards and pull me one for this draft."
     },
     {
       "id": "T12",
