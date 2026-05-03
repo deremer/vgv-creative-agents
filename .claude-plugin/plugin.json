@@ -1,9 +1,10 @@
 {
   "name": "lateral-prompts",
   "version": "0.1.0",
-  "description": "A deck of lateral-thinking prompts (in the spirit of Brian Eno's Oblique Strategies) for breaking stuck thinking. Manually invoked via /lateral-prompts. Spawns 4 isolated subagents that each explore the user's current focus through a different card, then synthesizes the results.",
+  "description": "A deck of lateral-thinking prompts for breaking stuck thinking. Manually invoked via /lateral-prompts. Spawns 4 isolated subagents that each explore the user's current focus through a different card, then synthesizes the results.",
   "author": {
     "name": "Very Good Ventures",
     "url": "https://verygood.ventures"
-  }
+  },
+  "license": "MIT"
 }

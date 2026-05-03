@@ -1,7 +1,7 @@
 ---
 name: lateral-prompts
 description: Runs a 4-card lateral-thinking session against the user's current focus. Draws 2 random canonical cards and 2 ephemeral cards, then fans out 4 isolated subagents in parallel to explore each card before synthesizing. Triggers only on explicit `/lateral-prompts` invocation or named delegation from another skill. Does not trigger on conversational mentions of creativity, brainstorming, feeling stuck, or wanting fresh ideas. The mechanic depends on the user consciously choosing to break their own pattern, so inferred-intent invocation defeats the purpose.
-compatibility: "Designed for Claude Code. Uses ${CLAUDE_PLUGIN_ROOT} and writes to /tmp/. Requires Python 3."
+compatibility: "Designed for Claude Code. Uses ${CLAUDE_PLUGIN_ROOT}. Requires Python 3. Session files write to a runtime-resolved path (\\$TMPDIR, /tmp/, or ./.lateral-prompts/), so the skill works on Claude Code, Claude Cowork, and other surfaces with different write sandboxes."
 ---
 
 # Lateral Prompts
@@ -82,7 +82,15 @@ You now have 4 cards: 2 drawn + 2 ephemeral.
 
 ### Step 4 — Set up the session directory
 
-Create `/tmp/lateral-prompts/<YYYY-MM-DD-HHMM>-<slug>/` where `<slug>` is a 2–4-word kebab-case summary of the focus (e.g., `pricing-tier-redesign`). Write into it:
+Pick a writable session root before creating any files. Different Claude surfaces sandbox writes differently — `/tmp/` is reliable on Claude Code but blocked on Claude Cowork — so probe down this ladder and stop at the first rung where directory creation succeeds:
+
+1. `$TMPDIR/lateral-prompts/<YYYY-MM-DD-HHMM>-<slug>/` — system temp, set on macOS and most sandboxed environments.
+2. `/tmp/lateral-prompts/<YYYY-MM-DD-HHMM>-<slug>/` — Linux fallback when `$TMPDIR` is unset.
+3. `./.lateral-prompts/<YYYY-MM-DD-HHMM>-<slug>/` — working-directory fallback when neither temp path is writable.
+
+`<slug>` is a 2–4-word kebab-case summary of the focus (e.g., `pricing-tier-redesign`). The resolved absolute path is the session root. Use it everywhere downstream and pass it verbatim into each explorer's spawn prompt in Step 5.
+
+Write into the resolved session root:
 
 - `focus-brief.md` — the brief from Step 1
 - `cards-drawn.json` — the script output plus the 2 ephemeral cards (with their categories) appended
@@ -99,14 +107,14 @@ You have one card to explore against a focus area. Your context is isolated from
 CARD: <card text>
 CATEGORY: <category if known, otherwise "unknown">
 
-FOCUS BRIEF: read /tmp/lateral-prompts/<session-dir>/focus-brief.md
+FOCUS BRIEF: read <session-dir>/focus-brief.md
 
-DELIVERABLE: write your exploration to /tmp/lateral-prompts/<session-dir>/card-<N>-<short-slug>.md
+DELIVERABLE: write your exploration to <session-dir>/card-<N>-<short-slug>.md
 
 Follow the structure in your agent instructions exactly. Sharp, concrete, no hedging. Three genuinely distinct directions, not three flavors of one. Expand each direction in depth before committing to the bold proposal — the proposal is a synthesis, not a leap from stubs.
 ```
 
-Where `<N>` is 1–4 and `<short-slug>` is a 1–3-word kebab-case version of the card text. Cards 1–2 are the canonical draws (category "unknown"); cards 3–4 are the ephemeral cards (category known).
+Substitute `<session-dir>` with the absolute path resolved in Step 4. `<N>` is 1–4 and `<short-slug>` is a 1–3-word kebab-case version of the card text. Cards 1–2 are the canonical draws (category "unknown"); cards 3–4 are the ephemeral cards (category known).
 
 ### Step 6 — Synthesize
 
@@ -187,7 +195,7 @@ The deck only works when each card pulls in its own direction. If the explorers 
 ## Gotchas
 
 - **`${CLAUDE_PLUGIN_ROOT}` resolves under Claude Code only.** On claude.ai or via the API the variable will be literal text. Adapt paths if you port this skill to another surface.
-- **`/tmp/lateral-prompts/` is Unix-only.** Won't work on Windows. If a Windows port is needed, swap to a `tempfile.mkdtemp()` call in the orchestrator and pass the resolved path through to the explorers.
+- **The session root is resolved at runtime, not hardcoded.** Step 4 walks a fallback ladder (`$TMPDIR` → `/tmp/` → `./.lateral-prompts/`) and stops at the first writable location. The working-directory fallback is what makes the skill survive sandboxes that block `/tmp/` writes (e.g., Claude Cowork). If you fall back into the working directory, expect a `.lateral-prompts/` folder to appear there — it's gitignored at the plugin root, but if the user runs the skill in a different repo they may want to ignore it locally.
 - **The `lateral-explorer` subagent must be installed via this plugin.** It lives at `agents/lateral-explorer.md` at the plugin root. If the plugin isn't loaded, the `Agent({subagent_type: "lateral-explorer", ...})` call fails. Do not silently substitute `general-purpose`. The agent profile carries the deliverable template and the read-only-plus-own-output tool restriction.
 - **`scripts/draw_cards.py` is Python 3 stdlib only.** No `pip install` needed. If `python3` is not on PATH, the bash invocation fails; see Step 2 for the failure protocol.
 - **Don't re-roll the draw.** It is tempting when a card looks irrelevant. The lateral pull only works because the choice is uncorrelated with the focus. A re-rolled card is a hand-picked card with extra steps.
