@@ -1,0 +1,160 @@
+{
+  "skill_name": "lateral-prompts",
+  "notes": "Manual-only skill, invoked via /lateral-prompts. The trigger eval suite below verifies that explicit invocations fire the skill and that conversational mentions of creativity, stuck thinking, brainstorming, or fresh ideas do NOT fire it. The output evals exercise focus-brief capture, divergence across 4 cards, and synthesis judgment. Run trigger evals on Sonnet 4.6 and Opus 4.7 before broad use; skip Haiku since the synthesis quality bar requires stronger reasoning.",
+  "tested_on": [
+    {"model": "claude-sonnet-4-6", "last_run": null},
+    {"model": "claude-opus-4-7", "last_run": null}
+  ],
+  "thresholds": {
+    "runs_per_query": 3,
+    "should_trigger_min_rate": 0.5,
+    "should_not_trigger_max_rate": 0.0
+  },
+  "split": {
+    "train_fraction": 0.6,
+    "validation_fraction": 0.4,
+    "method": "fixed assignment in trigger_evals[].split, balanced should-trigger / should-not-trigger across both partitions"
+  },
+  "output_evals": [
+    {
+      "id": 1,
+      "prompt": "/lateral-prompts I'm rewriting the homepage hero for verygood.ventures. The current draft says 'We build Flutter apps that ship.' I think it's safe and forgettable but I can't see past it. The site needs to position us as the leader in agentic engineering, not just Flutter. Audience is heads of mobile / VPs of engineering at Fortune 500s. We are migrating from Webflow to Astro and need new copy by next week.",
+      "expected_output": "A focus brief showing the orchestrator captured the positioning tension (Flutter leader -> agentic engineering), 4 distinct card explorations (each in card-N-*.md), and a synthesis.md with 3 creative directions for the hero copy plus concrete refinements the user can paste into the draft.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "/lateral-prompts We've been asked by a Fortune 100 client to propose a 12-week 'AI-accelerated SDLC' engagement. My instinct is the standard sprint-zero -> design -> build -> ship phases but I think that's missing the point of what they're paying us for. The client's pain is that their internal teams ship features 4x slower than competitors. Help me see what I'm not seeing.",
+      "expected_output": "A focus brief that captures the proposal-shape problem (standard phases vs. the actual client pain), 4 explorations through different cards, and a synthesis with bold directions for what an AI-accelerated SDLC engagement structure could look like beyond the default phases.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "/lateral-prompts",
+      "expected_output": "Skill should auto-extract focus from the conversation. If there's no clear focus in the conversation, it should ask the user to describe what they're working on rather than guessing.",
+      "files": []
+    }
+  ],
+  "trigger_evals": [
+    {
+      "id": "T1",
+      "split": "train",
+      "should_trigger": true,
+      "query": "/lateral-prompts I'm rewriting the homepage hero for verygood.ventures and need fresh angles."
+    },
+    {
+      "id": "T2",
+      "split": "train",
+      "should_trigger": true,
+      "query": "/lateral-prompts focus: pricing tier rewrite for the agentic engineering tier"
+    },
+    {
+      "id": "T3",
+      "split": "train",
+      "should_trigger": true,
+      "query": "/lateral-prompts the SDLC proposal needs a new structure"
+    },
+    {
+      "id": "T4",
+      "split": "train",
+      "should_trigger": true,
+      "query": "Can you run /lateral-prompts on the all-hands keynote draft I just sent?"
+    },
+    {
+      "id": "T5",
+      "split": "train",
+      "should_trigger": true,
+      "query": "/lateral-prompts let's run the deck on the brand voice work"
+    },
+    {
+      "id": "T6",
+      "split": "train",
+      "should_trigger": true,
+      "query": "/lateral-prompts"
+    },
+    {
+      "id": "T7",
+      "split": "train",
+      "should_trigger": false,
+      "query": "I'm stuck on this design and could use some lateral thinking. What angles am I missing?"
+    },
+    {
+      "id": "T8",
+      "split": "train",
+      "should_trigger": false,
+      "query": "Give me some creative angles on this hero copy."
+    },
+    {
+      "id": "T9",
+      "split": "train",
+      "should_trigger": false,
+      "query": "I need fresh ideas for the keynote and I don't know where to start."
+    },
+    {
+      "id": "T10",
+      "split": "train",
+      "should_trigger": false,
+      "query": "What's a brainstorming method I could use to get unstuck on this proposal?"
+    },
+    {
+      "id": "T11",
+      "split": "train",
+      "should_trigger": false,
+      "query": "Pretend you're Brian Eno's Oblique Strategies and pull me a card for this draft."
+    },
+    {
+      "id": "T12",
+      "split": "train",
+      "should_trigger": false,
+      "query": "We've been thinking about the engagement structure the same way too long. Push back on me."
+    },
+    {
+      "id": "V1",
+      "split": "validation",
+      "should_trigger": true,
+      "query": "/lateral-prompts I want to break my own pattern on the recruiting page copy."
+    },
+    {
+      "id": "V2",
+      "split": "validation",
+      "should_trigger": true,
+      "query": "/lateral-prompts no need to confirm, focus is the partnership announcement post"
+    },
+    {
+      "id": "V3",
+      "split": "validation",
+      "should_trigger": true,
+      "query": "Run /lateral-prompts on this. Brief: rewriting the agentic engineering one-pager."
+    },
+    {
+      "id": "V4",
+      "split": "validation",
+      "should_trigger": true,
+      "query": "/lateral-prompts focus: how should the talent brand evolve for AI engineers"
+    },
+    {
+      "id": "V5",
+      "split": "validation",
+      "should_trigger": false,
+      "query": "Help me unblock my thinking on this proposal. I'm in a rut."
+    },
+    {
+      "id": "V6",
+      "split": "validation",
+      "should_trigger": false,
+      "query": "Suggest some lateral approaches to the SDLC engagement so I can compare options."
+    },
+    {
+      "id": "V7",
+      "split": "validation",
+      "should_trigger": false,
+      "query": "I want to see this hero from a different angle. What would a contrarian say?"
+    },
+    {
+      "id": "V8",
+      "split": "validation",
+      "should_trigger": false,
+      "query": "We need a brainstorm session on the partnership announcement. What's a good format?"
+    }
+  ]
+}
