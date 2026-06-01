@@ -20,14 +20,16 @@ Isolated contexts are load-bearing. If the explorers shared state, card 4 would 
 
 ## Installation
 
-This is a Claude Code plugin. Clone it into your plugins directory:
+This repo is a Claude Code plugin marketplace. Add it, then install the plugin:
 
-```bash
-cd ~/.claude/plugins
-git clone git@github.com:deremer/lateral-prompts.git
+```
+/plugin marketplace add deremer/vgv-creative-agents
+/plugin install lateral-prompts@vgv-creative-agents
 ```
 
-Once Claude Code picks up the plugin, the skill is invokable as `/lateral-prompts` and the `lateral-explorer` subagent becomes available to the orchestrator.
+Update later with `/plugin marketplace update vgv-creative-agents`.
+
+Once installed, the skill is invokable as `/lateral-prompts` and the `lateral-explorer` subagent becomes available to the orchestrator.
 
 Requirements:
 
@@ -99,6 +101,7 @@ The full canonical deck of 150 cards lives in `skills/lateral-prompts/references
 ## Repo layout
 
 ```
+.claude-plugin/marketplace.json         marketplace catalog
 .claude-plugin/plugin.json              plugin manifest
 agents/lateral-explorer.md              subagent profile spawned per card
 skills/lateral-prompts/SKILL.md         orchestrator skill

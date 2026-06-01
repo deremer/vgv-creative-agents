@@ -1,0 +1,25 @@
+{
+  "name": "vgv-creative-agents",
+  "owner": {
+    "name": "Very Good Ventures",
+    "email": "hello@verygood.ventures"
+  },
+  "description": "Claude Code plugins from Very Good Ventures.",
+  "plugins": [
+    {
+      "name": "lateral-prompts",
+      "source": "./",
+      "description": "A deck of lateral-thinking prompts for breaking stuck thinking. Manually invoked via /lateral-prompts. Spawns 4 isolated subagents that each explore the user's current focus through a different card, then synthesizes the results.",
+      "version": "0.1.0",
+      "license": "MIT",
+      "author": {
+        "name": "Very Good Ventures",
+        "url": "https://verygood.ventures"
+      },
+      "homepage": "https://github.com/deremer/vgv-creative-agents",
+      "repository": "https://github.com/deremer/vgv-creative-agents",
+      "keywords": ["lateral-thinking", "creativity", "brainstorming", "oblique-strategies", "subagents"],
+      "category": "productivity"
+    }
+  ]
+}
