@@ -16,8 +16,8 @@
         "name": "Very Good Ventures",
         "url": "https://verygood.ventures"
       },
-      "homepage": "https://github.com/deremer/vgv-creative-agents",
-      "repository": "https://github.com/deremer/vgv-creative-agents",
+      "homepage": "https://github.com/VGVentures/vgv-creative-agents",
+      "repository": "https://github.com/VGVentures/vgv-creative-agents",
       "keywords": ["lateral-thinking", "creativity", "brainstorming", "oblique-strategies", "subagents", "draw-1"],
       "category": "productivity"
     }

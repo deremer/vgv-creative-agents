@@ -23,7 +23,7 @@ Isolated contexts are load-bearing. If the explorers shared state, card 4 would 
 This repo is a Claude Code plugin marketplace. Add it, then install the plugin:
 
 ```
-/plugin marketplace add deremer/vgv-creative-agents
+/plugin marketplace add VGVentures/vgv-creative-agents
 /plugin install lateral-prompts@vgv-creative-agents
 ```
 
