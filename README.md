@@ -55,6 +55,18 @@ After the run, you get a session directory containing the focus brief, the four 
 
 If the synthesis misses something, you can ask for a revision. Light edits get applied directly. A substantive miss triggers a re-synthesis from the existing four explorations. A wrong focus brief means starting a new session, since patching over a wrong-focus run wastes the spread.
 
+## One card at a time: `/draw-1`
+
+When you want a quick nudge instead of a full four-card spread, run `/draw-1`. It draws a single card and runs one explorer against your focus, then hands you the same synthesis shape.
+
+```
+/draw-1 the pricing page headline has been rewritten four times and still feels safe
+```
+
+The draw is a coin flip decided in code, not by Claude. Half the time you get a random card from the canonical deck. The other half you get a fresh ephemeral card written on the spot for a random category. Keeping the choice in the script is the point: an LLM "picking randomly" drifts toward cards that already fit the problem, which kills the lateral pull.
+
+`/draw-1` reuses the `lateral-prompts` deck, draw script, and `lateral-explorer` subagent. Same brief-then-confirm flow, same revision routing, one card instead of four. Use `/draw-1` for a fast jolt and `/lateral-prompts` when you want a wide spread to converge from.
+
 ## When to use it
 
 - You've rewritten the same paragraph six times and each version is slightly worse.
@@ -104,10 +116,12 @@ The full canonical deck of 150 cards lives in `skills/lateral-prompts/references
 .claude-plugin/marketplace.json         marketplace catalog
 .claude-plugin/plugin.json              plugin manifest
 agents/lateral-explorer.md              subagent profile spawned per card
-skills/lateral-prompts/SKILL.md         orchestrator skill
-skills/lateral-prompts/scripts/         draw_cards.py
-skills/lateral-prompts/references/      canonical deck and writing rules
+skills/lateral-prompts/SKILL.md         four-card orchestrator skill
+skills/lateral-prompts/scripts/         draw_cards.py (shared; --single for draw-1)
+skills/lateral-prompts/references/      canonical deck and writing rules (shared)
 skills/lateral-prompts/evals/           evals for the skill
+skills/draw-1/SKILL.md                  single-card orchestrator skill
+skills/draw-1/evals/                    evals for the skill
 ```
 
 ## Credits

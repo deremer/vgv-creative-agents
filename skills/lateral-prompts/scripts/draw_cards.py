@@ -8,9 +8,14 @@ choosing "randomly" tends to pick cards that already feel relevant, which
 defeats the purpose.
 
 Usage:
-    draw_cards.py [--seed N] [--canonical PATH]
+    draw_cards.py [--seed N] [--canonical PATH] [--single]
 
 Output: JSON to stdout with `drawn_cards`, `ephemeral_categories`, `deck_size`.
+
+With --single, draws exactly one card. A coin flip (in code, not by an LLM)
+decides between a random canonical card and a random category for a fresh
+ephemeral card. The output adds a `mode` field ("canonical" or "ephemeral")
+and populates only the matching list; the other is empty.
 """
 
 from __future__ import annotations
@@ -66,6 +71,11 @@ def main() -> int:
         default=None,
         help="Path to lateral-prompts.md (default: plugin reference/)",
     )
+    parser.add_argument(
+        "--single",
+        action="store_true",
+        help="Draw exactly one card: coin-flip between a canonical card and an ephemeral category",
+    )
     args = parser.parse_args()
 
     canonical_path = args.canonical or default_canonical_path()
@@ -79,6 +89,28 @@ def main() -> int:
         return 1
 
     rng = random.Random(args.seed) if args.seed is not None else random.Random()
+
+    if args.single:
+        # Coin flip in code, not by an LLM: the choice between an existing card
+        # and a fresh ephemeral one must stay uncorrelated with the focus.
+        if rng.random() < 0.5:
+            result = {
+                "mode": "canonical",
+                "drawn_cards": [rng.choice(deck)],
+                "ephemeral_categories": [],
+                "deck_size": len(deck),
+                "canonical_path": str(canonical_path),
+            }
+        else:
+            result = {
+                "mode": "ephemeral",
+                "drawn_cards": [],
+                "ephemeral_categories": [rng.choice(CATEGORIES)],
+                "deck_size": len(deck),
+                "canonical_path": str(canonical_path),
+            }
+        print(json.dumps(result, indent=2))
+        return 0
 
     drawn_cards = rng.sample(deck, NUM_CANONICAL_DRAWS)
     ephemeral_categories = rng.sample(CATEGORIES, NUM_EPHEMERAL_CATEGORIES)

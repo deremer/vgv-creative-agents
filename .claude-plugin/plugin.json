@@ -1,7 +1,7 @@
 {
   "name": "lateral-prompts",
   "version": "0.1.0",
-  "description": "A deck of lateral-thinking prompts for breaking stuck thinking. Manually invoked via /lateral-prompts. Spawns 4 isolated subagents that each explore the user's current focus through a different card, then synthesizes the results.",
+  "description": "A deck of lateral-thinking prompts for breaking stuck thinking. Ships two manually-invoked skills: /lateral-prompts draws 4 cards and fans out 4 isolated subagents, then synthesizes the results; /draw-1 draws a single card (canonical or ephemeral, chosen by code) and runs one explorer for a quick nudge.",
   "author": {
     "name": "Very Good Ventures",
     "url": "https://verygood.ventures"

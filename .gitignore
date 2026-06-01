@@ -1,3 +1,4 @@
 .DS_Store
 .claude/settings.local.json
 .lateral-prompts/
+.draw-1/
